@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery with Profile</title>
+    <style>
+        /* Background animation */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background: url('file:///C:/Users/USER/Downloads/WhatsApp%20Image%202024-11-06%20at%2011.58.38_44141969.jpg') no-repeat center center fixed;
+            background-size: cover;
+            animation: backgroundMove 10s linear infinite;
+        }
+        @keyframes backgroundMove {
+            from { background-position: 0 0; }
+            to { background-position: 100% 100%; }
+        }
+
+        /* Layout and styling */
+        .container {
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .profile {
+            margin: 20px 0;
+        }
+
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile input[type="file"] {
+            display: none;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .photo-card {
+            background: rgba(0, 0, 0, 0.7);
+            margin: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .photo-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .upload-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #5a5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile">
+            <h2>Profile</h2>
+            <img id="profileImage" src="default-profile.jpg" alt="Profile Picture">
+            <label class="upload-button">
+                Upload Profile Photo
+                <input type="file" id="profileUpload" accept="image/*">
+            </label>
+            <br>
+            <textarea id="bio" placeholder="Write your bio here..." rows="4" cols="30"></textarea>
+        </div>
+
+        <!-- Gallery Section -->
+        <div>
+            <h2>Photo Gallery</h2>
+            <input type="file" id="photoUpload" accept="image/*">
+            <input type="text" id="photoTitle" placeholder="Photo Title">
+            <textarea id="photoCaption" placeholder="Photo Caption"></textarea>
+            <button onclick="addPhoto()" class="upload-button">Add Photo</button>
+        </div>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <script>
+        // Profile Photo Upload
+        document.getElementById("profileUpload").addEventListener("change", function(event) {
+            const profileImage = document.getElementById("profileImage");
+            const file = event.target.files[0];
+            profileImage.src = URL.createObjectURL(file);
+        });
+
+        // Adding Photos to Gallery
+        function addPhoto() {
+            const gallery = document.getElementById("gallery");
+            const photoUpload = document.getElementById("photoUpload").files[0];
+            const title = document.getElementById("photoTitle").value;
+            const caption = document.getElementById("photoCaption").value;
+
+            if (!photoUpload || !title || !caption) {
+                alert("Please add a photo, title, and caption!");
+                return;
+            }
+
+            const photoURL = URL.createObjectURL(photoUpload);
+
+            const photoCard = document.createElement("div");
+            photoCard.className = "photo-card";
+            photoCard.innerHTML = `
+                <img src="${photoURL}" alt="${title}">
+                <h3>${title}</h3>
+                <p>${caption}</p>
+                <button onclick="deletePhoto(this)" class="upload-button">Delete</button>
+            `;
+
+            gallery.appendChild(photoCard);
+
+            // Clear inputs after adding photo
+            document.getElementById("photoTitle").value = "";
+            document.getElementById("photoCaption").value = "";
+            document.getElementById("photoUpload").value = "";
+        }
+
+        // Delete photo
+        function deletePhoto(button) {
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
